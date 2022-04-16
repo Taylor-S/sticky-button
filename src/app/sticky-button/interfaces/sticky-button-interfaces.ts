@@ -1,0 +1,13 @@
+export interface BasicVectorOptions {
+	x?: number;
+	y?: number;
+}
+
+export interface MouseVectorOptions extends BasicVectorOptions {
+	listener?: any;
+}
+
+export interface AttractorOptions {
+	el: Element;
+	rangeOfAttraction?: number;
+}
