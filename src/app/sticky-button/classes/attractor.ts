@@ -6,20 +6,20 @@ export class Attractor {
 	protected onAnimatedCallback: any;
 	protected hasReachedPosition: boolean = false;
 	protected canInteract: boolean = false;
-	protected userInteracting: boolean;
-	protected el: Element;
+	protected userInteracting: boolean | undefined;
+	protected el: Element | undefined;
 
-	protected rangeOfAttraction: number;
+	protected rangeOfAttraction: number = 1;
 	protected limitTo: string = "xy";
-	protected x: number;
-	protected y: number;
-	protected xTarget: number;
-	protected yTarget: number;
-	protected area: number;
+	protected x: number | undefined;
+	protected y: number | undefined;
+	protected xTarget: number | undefined;
+	protected yTarget: number | undefined;
+	protected area: number = 0;
 
 	protected xVector: number = 0;
 	protected yVector: number = 0;
-	protected startOffsetVector: BasicVector;
+	protected startOffsetVector: BasicVector | undefined;
 
 	private bounceFriction: number = 0.85;
 	private spring: number = 0.1;
@@ -33,18 +33,32 @@ export class Attractor {
 		return window.innerHeight * 0.5;
 	};
 
-  constructor(options: AttractorOptions) {
-		this.el = options.el;
+  constructor() {
+    console.log('constructed attractor');
+		// this.el = options.el;
 
-		// defaults to 0.5, half the area.
-		this.rangeOfAttraction = options.rangeOfAttraction ? options.rangeOfAttraction : 0.5;
+		// // defaults to 0.5, half the area.
+		// this.rangeOfAttraction = options.rangeOfAttraction ? options.rangeOfAttraction : 0.5;
 
-		this.area = parseInt(window.getComputedStyle(this.el, null).getPropertyValue("width"), 10);
+		// this.area = parseInt(window.getComputedStyle(this.el, null).getPropertyValue("width"), 10);
 
-		document.addEventListener("mousevector-move", this.onMouseMove.bind(this), false);
-  
-    setTimeout(() => this.renderQueCall(), 0);
+		// document.addEventListener("mousevector-move", this.onMouseMove.bind(this), false);
+
+    // setTimeout(() => this.renderQueCall(), 0);
 	}
+
+  // constructor(options: AttractorOptions) {
+	// 	this.el = options.el;
+
+	// 	// defaults to 0.5, half the area.
+	// 	this.rangeOfAttraction = options.rangeOfAttraction ? options.rangeOfAttraction : 0.5;
+
+	// 	this.area = parseInt(window.getComputedStyle(this.el, null).getPropertyValue("width"), 10);
+
+	// 	document.addEventListener("mousevector-move", this.onMouseMove.bind(this), false);
+
+  //   setTimeout(() => this.renderQueCall(), 0);
+	// }
 
   private onMouseMove(event: CustomEvent) {
 		if (this.canInteract && !this.onAnimatedCallback) {
@@ -80,59 +94,60 @@ export class Attractor {
 			this.hasReachedPosition = false;
 		}
 	}
-  
-  public renderQueCall() {
-		if (this.userInteracting) {
-			// ex. dragging..
-			let mouseVector: MouseVector = window.mouseVector;
 
-			this.xTarget = mouseVector.x - this.startOffsetVector.x;
-			this.yTarget = mouseVector.y - this.startOffsetVector.y;
+  // public renderQueCall() {
+	// 	if (this.userInteracting) {
+	// 		// ex. dragging..
+	// 		let mouseVector: MouseVector = window.mouseVector;
 
-			this.x += (this.xTarget - this.x) * this.easeSpeed;
-			this.y += (this.yTarget - this.y) * this.easeSpeed;
-		} else {
-			this.xVector += (this.xTarget - this.x) * this.spring;
-			this.yVector += (this.yTarget - this.y) * this.spring;
+	// 		this.xTarget = mouseVector.x - this.startOffsetVector.x;
+	// 		this.yTarget = mouseVector.y - this.startOffsetVector.y;
 
-			this.x += (this.xVector *= this.bounceFriction);
-			this.y += (this.yVector *= this.bounceFriction);
-		}
+	// 		this.x += (this.xTarget - this.x) * this.easeSpeed;
+	// 		this.y += (this.yTarget - this.y) * this.easeSpeed;
+	// 	} else {
+	// 		this.xVector += (this.xTarget - this.x) * this.spring;
+	// 		this.yVector += (this.yTarget - this.y) * this.spring;
 
-		if (Math.abs(this.x - this.xTarget) < 0.1 && Math.abs(this.y - this.yTarget) < 0.1 && !this.hasReachedPosition) {
-			this.hasReachedPosition = true;
+	// 		this.x += (this.xVector *= this.bounceFriction);
+	// 		this.y += (this.yVector *= this.bounceFriction);
+	// 	}
 
-			if (!this.canInteract && this.onAnimatedCallback) {
-				this.onAnimatedCallback();
-			}
-		}
+	// 	if (Math.abs(this.x - this.xTarget) < 0.1 && Math.abs(this.y - this.yTarget) < 0.1 && !this.hasReachedPosition) {
+	// 		this.hasReachedPosition = true;
 
-		let x: number = this.x - this.xCenter;
-		let y: number = this.y - this.yCenter;
+	// 		if (!this.canInteract && this.onAnimatedCallback) {
+	// 			this.onAnimatedCallback();
+	// 		}
+	// 	}
 
-		this.setPosition(x, y);
+	// 	let x: number = this.x - this.xCenter;
+	// 	let y: number = this.y - this.yCenter;
 
-		requestAnimationFrame(()=>this.renderQueCall());
-	}
+	// 	this.setPosition(x, y);
+
+	// 	requestAnimationFrame(()=>this.renderQueCall());
+	// }
 
   protected setPosition(x: number, y: number) {
-		if (this.limitTo == "xy") {
-			TweenMax.set(this.el, {
-				force3D: true,
-				x: x,
-				y: y
-			});
-		} else if (this.limitTo == "x") {
-			TweenMax.set(this.el, {
-				force3D: true,
-				x: x
-			});
-		} else if (this.limitTo == "y") {
-			TweenMax.set(this.el, {
-				force3D: true,
-				y: y
-			});
-		}
+    console.log('set pos');
+		// if (this.limitTo == "xy" && this.el) {
+		// 	TweenMax.set(this.el, {
+		// 		force3D: true,
+		// 		x: x,
+		// 		y: y
+		// 	});
+		// } else if (this.limitTo == "x" && this.el) {
+		// 	TweenMax.set(this.el, {
+		// 		force3D: true,
+		// 		x: x
+		// 	});
+		// } else if (this.limitTo == "y" && this.el) {
+		// 	TweenMax.set(this.el, {
+		// 		force3D: true,
+		// 		y: y
+		// 	});
+		// }
 	}
 
   protected animateIn() {

@@ -1,15 +1,73 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Attractor } from './classes/attractor';
+import { MouseVector } from './classes/mouse-vector';
 
 @Component({
   selector: 'app-sticky-button',
   templateUrl: './sticky-button.component.html',
   styleUrls: ['./sticky-button.component.scss']
 })
-export class StickyButtonComponent implements OnInit {
+export class StickyButtonComponent extends Attractor implements OnInit, AfterViewInit {
+  private productTestIndex: number = 0;
+  @ViewChild('inner') inner: ElementRef | undefined;
 
-  constructor() { }
+  constructor() {
+    super();
+  }
+  ngAfterViewInit(): void {
+    console.log(this.inner);
+  }
 
   ngOnInit(): void {
+    this.area = 300; //overwritting
+    console.log(this.inner);
+  }
+
+  public onMouseDown(event: MouseVector | any) {
+    console.log('mousedown');
+    console.log(event);
+    // if (this.canInteract && !this.onAnimatedCallback) {
+
+    //   this.userInteracting = true;
+
+    //   let mouseVector: MouseVector = window.mouseVector;
+
+    //   this.startOffsetVector = new BasicVector({
+    //     x: mouseVector.x - this.x,
+    //     y: mouseVector.y - this.y
+    //   });
+    // }
+  }
+
+  @HostListener('document:mouseup', ['$event'])
+  public onMouseUp(event: MouseVector | any) {
+    console.log('mouseup');
+    console.log(event);
+    // this.userInteracting = false;
+
+    // if (this.x < window.innerWidth * 0.4) {
+    //   this.animateOut("left");
+    // } else if (this.x > window.innerWidth * 0.6) {
+    //   this.animateOut("right");
+    // } else {
+    //   this.xTarget = this.xCenter;
+    // }
+
+    // this.yTarget = this.yCenter;
+
+    // // everytime position vector changes..
+    // this.hasReachedPosition = false;
+  }
+
+  protected onAnimatedIn() {
+    if (this.y !== undefined) {
+      // this.hasReachedPosition = false;
+
+      if (Math.abs(this.y - (window.innerHeight * 0.5)) < 0.1) {
+        //this.limitTo = "x";
+        super.onAnimatedIn();
+      }
+    }
   }
 
 }
@@ -102,36 +160,36 @@ export class StickyButtonComponent implements OnInit {
 // 		this.animateIn();
 // 	}
 
-// 	private onMouseDown(event: MouseVector){
-// 		if (this.canInteract && !this.onAnimatedCallback) {
+	// private onMouseDown(event: MouseVector){
+	// 	if (this.canInteract && !this.onAnimatedCallback) {
 
-// 			this.userInteracting = true;
+	// 		this.userInteracting = true;
 
-// 			let mouseVector: MouseVector = window.mouseVector;
+	// 		let mouseVector: MouseVector = window.mouseVector;
 
-// 			this.startOffsetVector = new BasicVector({
-// 				x: mouseVector.x - this.x,
-// 				y: mouseVector.y - this.y
-// 			});
-// 		}
-// 	}
+	// 		this.startOffsetVector = new BasicVector({
+	// 			x: mouseVector.x - this.x,
+	// 			y: mouseVector.y - this.y
+	// 		});
+	// 	}
+	// }
 
-// 	private onMouseUp(event: MouseVector) {
-// 		this.userInteracting = false;
+	// private onMouseUp(event: MouseVector) {
+	// 	this.userInteracting = false;
 
-// 		if (this.x < window.innerWidth * 0.4) {
-// 			this.animateOut("left");
-// 		} else if (this.x > window.innerWidth * 0.6) {
-// 			this.animateOut("right");
-// 		}else{
-// 			this.xTarget = this.xCenter;
-// 		}
+	// 	if (this.x < window.innerWidth * 0.4) {
+	// 		this.animateOut("left");
+	// 	} else if (this.x > window.innerWidth * 0.6) {
+	// 		this.animateOut("right");
+	// 	}else{
+	// 		this.xTarget = this.xCenter;
+	// 	}
 
-// 		this.yTarget = this.yCenter;
+	// 	this.yTarget = this.yCenter;
 
-// 		// everytime position vector changes..
-// 		this.hasReachedPosition = false;
-// 	}
+	// 	// everytime position vector changes..
+	// 	this.hasReachedPosition = false;
+	// }
 
 // 	public animateOut(towards: string){
 // 		this.userInteracting = false;

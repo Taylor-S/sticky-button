@@ -1,4 +1,4 @@
-import { BasicVectorOptions } from "./sticky-button-interfaces";
+import { BasicVectorOptions } from '../interfaces/sticky-button-interfaces';
 
 export class BasicVector {
 	protected _x: number = 0;

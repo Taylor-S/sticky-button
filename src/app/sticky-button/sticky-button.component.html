@@ -5,7 +5,7 @@
 
 
 <div class="circle">
-  <div class="inner"></div>
+  <div #inner (mousedown)="onMouseDown($event)" (mouseup)="onMouseUp($event)" class="inner"></div>
 </div>
 
 
