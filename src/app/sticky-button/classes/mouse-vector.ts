@@ -1,5 +1,5 @@
+import { MouseVectorOptions } from "../interfaces/sticky-button-interfaces";
 import { BasicVector } from "./basic-vector";
-import { MouseVectorOptions } from "./sticky-button-interfaces";
 
 export class MouseVector extends BasicVector {
 

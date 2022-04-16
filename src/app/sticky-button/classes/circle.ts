@@ -24,10 +24,10 @@ export class Circle extends Attractor {
 	protected animateIn() {
 		super.animateIn();
 
-		this.el.classList.remove("product-"+this.productTestIndex);
+		this.el.classList.remove("product-" + this.productTestIndex);
 		this.productTestIndex++
 		this.productTestIndex %= 2
-		this.el.classList.add("product-"+this.productTestIndex);
+		this.el.classList.add("product-" + this.productTestIndex);
 
 		this.limitTo = "xy";
 
@@ -64,7 +64,7 @@ export class Circle extends Attractor {
 		let yShadow: number = 5 + (this.limitTo == "x" ? 0 : ((halfh - this.y) / halfh) * 200);
 		let blur: number = 50;
 		let spread: number = 20;
-    let box: string = xShadow + "px " + yShadow + "px " + blur + "px " + spread + "px rgb(158, 117, 177, 0.75)";
+		let box: string = xShadow + "px " + yShadow + "px " + blur + "px " + spread + "px rgb(158, 117, 177, 0.75)";
 
 		TweenMax.set(this.innerEl, {
 			boxShadow: box
@@ -72,7 +72,7 @@ export class Circle extends Attractor {
 	}
 
 	protected onAnimatedIn() {
-		if (this.y !== undefined){
+		if (this.y !== undefined) {
 			// this.hasReachedPosition = false;
 
 			if (Math.abs(this.y - (window.innerHeight * 0.5)) < 0.1) {
@@ -82,15 +82,16 @@ export class Circle extends Attractor {
 		}
 	}
 
-	private onAnimatedOut(){
+	private onAnimatedOut() {
 		this.animateIn();
 	}
 
-	private onMouseDown(event: MouseVector){
+	private onMouseDown(event: MouseVector) {
 		if (this.canInteract && !this.onAnimatedCallback) {
 
 			this.userInteracting = true;
 
+			// Is a global variable. Need to create a vector service to share between classes? Original Code -(var mouseVector: MouseVector = new MouseVector();)
 			let mouseVector: MouseVector = window.mouseVector;
 
 			this.startOffsetVector = new BasicVector({
@@ -107,7 +108,7 @@ export class Circle extends Attractor {
 			this.animateOut("left");
 		} else if (this.x > window.innerWidth * 0.6) {
 			this.animateOut("right");
-		}else{
+		} else {
 			this.xTarget = this.xCenter;
 		}
 
@@ -117,15 +118,15 @@ export class Circle extends Attractor {
 		this.hasReachedPosition = false;
 	}
 
-	public animateOut(towards: string){
+	public animateOut(towards: string) {
 		this.userInteracting = false;
 
-		if(towards == "left"){
+		if (towards == "left") {
 			this.canInteract = false;
 			this.onAnimatedCallback = this.onAnimatedOut;
 			this.xTarget = this.area * -0.55;
 			this.el.classList.remove("show");
-		}else if(towards == "right"){
+		} else if (towards == "right") {
 			this.canInteract = false;
 			this.onAnimatedCallback = this.onAnimatedOut;
 			this.xTarget = window.innerWidth + (this.area * 0.55);
