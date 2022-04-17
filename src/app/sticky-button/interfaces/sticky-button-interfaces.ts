@@ -9,5 +9,6 @@ export interface MouseVectorOptions extends BasicVectorOptions {
 
 export interface AttractorOptions {
 	el: Element;
+	innerEl: Element;
 	rangeOfAttraction?: number;
 }

@@ -4,8 +4,8 @@
 </svg> -->
 
 
-<div class="circle">
-  <div #inner (mousedown)="onMouseDown($event)" (mouseup)="onMouseUp($event)" class="inner"></div>
+<div class="circle" #circle (mousedown)="onMouseDown($event)" (mouseup)="onMouseUp($event)">
+  <div class="inner" #innerEl></div>
 </div>
 
 
