@@ -52,13 +52,16 @@ export class AttractorService {
 
 		this.area = parseInt(window.getComputedStyle(this.el, null).getPropertyValue("width"), 10);
 
-		// document.addEventListener("mousevector-move", this.onMouseMove.bind(this), false);
+		document.addEventListener(
+      'mousevector-move',
+      (this.onMouseMove.bind(this) as EventListener),
+      false
+    );
 
 		setTimeout(() => this.renderQueCall(), 0);
   }
 
-  @HostListener('document:mousevector-move', ['$event'])
-	private onMouseMove(event: CustomEvent) {
+	public onMouseMove(event: CustomEvent) {
 		console.log('docuemnt custom event called from attractor.');
 		if (this.canInteract && !this.onAnimatedCallback) {
 			let vector: MouseVector = event.detail;
@@ -115,11 +118,10 @@ export class AttractorService {
 		let spread: number = 20;
     let box: string = xShadow + "px " + yShadow + "px " + blur + "px " + spread + "px rgb(158, 117, 177, 0.75)";
 
-    
-		const boxShadow = gsap.set(this.innerEl, {
+
+		gsap.set(this.innerEl, {
 			boxShadow: box
 		});
-    console.log(boxShadow);
 
 		if (this.userInteracting) {
 			// ex. dragging..

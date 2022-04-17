@@ -122,7 +122,7 @@ export class StickyButtonComponent implements OnInit, AfterViewInit {
 		let spread: number = 20;
     let box: string = xShadow + "px " + yShadow + "px " + blur + "px " + spread + "px rgb(158, 117, 177, 0.75)";
 
-    
+
 		gsap.set(this.innerEl, {
 			boxShadow: box
 		});
