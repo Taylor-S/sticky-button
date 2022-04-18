@@ -11,4 +11,5 @@ export interface AttractorOptions {
 	el: Element;
 	innerEl: Element;
 	rangeOfAttraction?: number;
+  area?: number;
 }

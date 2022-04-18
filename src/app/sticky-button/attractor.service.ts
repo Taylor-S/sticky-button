@@ -1,9 +1,10 @@
-import { HostListener, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { BasicVector } from './classes/basic-vector';
 import { MouseVector } from './classes/mouse-vector';
 import { AttractorOptions } from './interfaces/sticky-button-interfaces';
-import { globalMouseVector } from './sticky-button.component';
+import { globalMouseVector } from './constants';
 import gsap from 'gsap';
+import { fromEvent } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,7 @@ export class AttractorService {
 	public y: number;
 	public xTarget: number;
 	public yTarget: number;
-	public area: number;
+	private area: number;
 
 	protected xVector: number = 0;
 	protected yVector: number = 0;
@@ -31,6 +32,7 @@ export class AttractorService {
 	private bounceFriction: number = 0.85;
 	private spring: number = 0.1;
 	private easeSpeed: number = 0.3;
+  private productTestIndex: number = 0;
 
 	public get xCenter(): number {
 		return window.innerWidth * 0.5;
@@ -42,27 +44,21 @@ export class AttractorService {
 
   constructor() { }
 
-  init(options: AttractorOptions) {
+  inititialiseOptions(options: AttractorOptions) {
     this.el = options.el;
     this.innerEl = options.innerEl;
-    console.log(this.innerEl);
 
 		// defaults to 0.5, half the area.
 		this.rangeOfAttraction = options.rangeOfAttraction ? options.rangeOfAttraction : 0.5;
 
-		this.area = parseInt(window.getComputedStyle(this.el, null).getPropertyValue("width"), 10);
+		this.area = options.area ? options.area : parseInt(window.getComputedStyle(this.el, null).getPropertyValue("width"), 10);
 
-		document.addEventListener(
-      'mousevector-move',
-      (this.onMouseMove.bind(this) as EventListener),
-      false
-    );
+    fromEvent(document, 'mousevector-move').subscribe((res) => this.onMouseMove(res as CustomEvent));
 
 		setTimeout(() => this.renderQueCall(), 0);
   }
 
 	public onMouseMove(event: CustomEvent) {
-		console.log('docuemnt custom event called from attractor.');
 		if (this.canInteract && !this.onAnimatedCallback) {
 			let vector: MouseVector = event.detail;
 
@@ -98,18 +94,17 @@ export class AttractorService {
 	}
 
 	public renderQueCall() {
-    /////////////////////////////////////////////
     let halfw: number = window.innerWidth * 0.5;
 		let halfh: number = window.innerHeight * 0.5;
-		// let x: number = this.x - this.xCenter;
 
-		document.dispatchEvent(new CustomEvent("circle-move", {
-			detail: {
-				percent: (this.x - this.xCenter) / window.innerWidth,
-				userInteracting: this.userInteracting,
-				canInteract: this.canInteract
-			}
-		}));
+    // Not doing anything! There's nothing listening to this event.
+		// document.dispatchEvent(new CustomEvent("circle-move", {
+		// 	detail: {
+		// 		percent: (this.x - this.xCenter) / window.innerWidth,
+		// 		userInteracting: this.userInteracting,
+		// 		canInteract: this.canInteract
+		// 	}
+		// }));
 
 		// box shadow
 		let xShadow: number = 5 + (this.limitTo == "y" ? 0 : ((halfw - this.x) / halfw) * 200);
@@ -176,16 +171,55 @@ export class AttractorService {
 		}
 	}
 
+  // Logic pulled out of circle class
 	public animateIn() {
 		this.hasReachedPosition = false;
 		this.x = this.xTarget = this.xCenter;
 		this.y = this.yTarget = this.yCenter;
 
 		this.onAnimatedCallback = this.onAnimatedIn;
+
+    this.el.classList.remove("product-" + this.productTestIndex);
+    this.productTestIndex++;
+    this.productTestIndex %= 2;
+    this.el.classList.add("product-" + this.productTestIndex);
+
+    this.limitTo = "xy";
+
+    this.el.classList.add("show");
+
+    this.y = this.yTarget = this.area * -1;
+
+    gsap.set(this.el, {
+      force3D: true,
+      x: this.xCenter,
+      y: this.y
+    });
+
+    this.yTarget = this.yCenter;
 	}
 
 	public onAnimatedIn() {
 		this.canInteract = true;
 		this.onAnimatedCallback = null;
 	}
+
+  public animateOut(towards: string) {
+    this.userInteracting = false;
+    this.onAnimatedCallback = this.animateIn;
+
+    if (towards == "left") {
+      this.canInteract = false;
+      this.xTarget = this.area * -0.55;
+      this.el.classList.remove("show");
+    } else if (towards == "right") {
+      this.canInteract = false;
+      this.xTarget = window.innerWidth + (this.area * 0.55);
+      this.el.classList.remove("show");
+    }
+
+    this.yTarget = this.yCenter;
+
+    this.hasReachedPosition = false;
+  }
 }
