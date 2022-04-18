@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { BasicVector } from './classes/basic-vector';
 import { MouseVector } from './classes/mouse-vector';
 import { AttractorService } from './attractor.service';
@@ -12,6 +12,7 @@ import { globalMouseVector } from './constants';
 export class StickyButtonComponent implements AfterViewInit {
   @ViewChild('circle') circle: ElementRef;
   @ViewChild('innerEl') innerEl: ElementRef;
+  @Input() title: string;
 
   constructor(private attractorService: AttractorService) {
   }
@@ -86,5 +87,11 @@ export class StickyButtonComponent implements AfterViewInit {
 
     // everytime position vector changes..
     this.attractorService.hasReachedPosition = false;
+  }
+
+  clickHandler() {
+    const randomColor = Math.floor(Math.random()*16777215).toString(16);
+
+    this.innerEl.nativeElement.setAttribute('style', `background: #${randomColor}`);
   }
 }

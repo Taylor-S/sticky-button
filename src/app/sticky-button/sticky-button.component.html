@@ -1,3 +1,5 @@
-<div class="circle" #circle (mousedown)="onMouseDown()" (mouseup)="onMouseUp()">
-  <div class="inner" #innerEl></div>
+<div class="circle" #circle (mousedown)="onMouseDown()" (mouseup)="onMouseUp()" (click)="clickHandler()">
+  <div class="inner" #innerEl>
+    <p>{{ title }}</p>
+  </div>
 </div>
