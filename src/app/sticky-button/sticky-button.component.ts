@@ -21,41 +21,11 @@ export class StickyButtonComponent implements AfterViewInit {
       el: this.circle.nativeElement,
       innerEl: this.innerEl.nativeElement,
       rangeOfAttraction: 1,
-      area: 300
+      area: 300 //overwriting
     });
 
     this.attractorService.animateIn();
   }
-
-  // Unused code - pull this out!
-  // protected onAnimatedIn() {
-  //   if (this.attractorService.y !== undefined) {
-
-  //     if (Math.abs(this.attractorService.y - window.innerHeight * 0.5) < 0.1) {
-  //       this.attractorService.onAnimatedIn();
-  //     }
-  //   }
-  // }
-
-  // Moved this into the AttractorService.
-  // public animateOut(towards: string) {
-  //   this.attractorService.userInteracting = false;
-  //   this.attractorService.onAnimatedCallback = this.attractorService.animateIn;
-
-  //   if (towards == "left") {
-  //     this.attractorService.canInteract = false;
-  //     this.attractorService.xTarget = this.attractorService.area * -0.55;
-  //     this.circle.nativeElement.classList.remove("show");
-  //   } else if (towards == "right") {
-  //     this.attractorService.canInteract = false;
-  //     this.attractorService.xTarget = window.innerWidth + (this.attractorService.area * 0.55);
-  //     this.circle.nativeElement.classList.remove("show");
-  //   }
-
-  //   this.attractorService.yTarget = this.attractorService.yCenter;
-
-  //   this.attractorService.hasReachedPosition = false;
-  // }
 
   public onMouseDown() {
     if (this.attractorService.canInteract && !this.attractorService.onAnimatedCallback) {

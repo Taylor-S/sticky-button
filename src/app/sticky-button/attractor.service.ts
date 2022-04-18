@@ -97,15 +97,6 @@ export class AttractorService {
     let halfw: number = window.innerWidth * 0.5;
 		let halfh: number = window.innerHeight * 0.5;
 
-    // Not doing anything! There's nothing listening to this event.
-		// document.dispatchEvent(new CustomEvent("circle-move", {
-		// 	detail: {
-		// 		percent: (this.x - this.xCenter) / window.innerWidth,
-		// 		userInteracting: this.userInteracting,
-		// 		canInteract: this.canInteract
-		// 	}
-		// }));
-
 		// box shadow
 		let xShadow: number = 5 + (this.limitTo == "y" ? 0 : ((halfw - this.x) / halfw) * 200);
 		let yShadow: number = 5 + (this.limitTo == "x" ? 0 : ((halfh - this.y) / halfh) * 200);
@@ -171,7 +162,7 @@ export class AttractorService {
 		}
 	}
 
-  // Logic pulled out of circle class
+
 	public animateIn() {
 		this.hasReachedPosition = false;
 		this.x = this.xTarget = this.xCenter;
